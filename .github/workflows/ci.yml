@@ -140,4 +140,4 @@ jobs:
             ${{ runner.os }}-integration-cache-
 
       - name: Run integration tests
-        run: pnpm test -- --testPathPattern=\.integration\.spec\.ts$ --maxWorkers=100%
+        run: pnpm test -- --testPathPatterns=\.integration\.spec\.ts$ --maxWorkers=100%
