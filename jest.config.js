@@ -3,6 +3,7 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
   testEnvironment: 'jsdom',
   cacheDirectory: '<rootDir>/.jest-cache',
+  maxWorkers: '50%', // Use 50% of CPU cores by default
   testPathIgnorePatterns: [
     '/node_modules/',
     '/dist/',

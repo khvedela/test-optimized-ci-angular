@@ -50,29 +50,23 @@ jobs:
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
 
-      # Cache Jest
-      - name: Cache Jest
+      # Cache TypeScript compilation output
+      - name: Cache TypeScript build
         uses: actions/cache@v4
         with:
-          path: .jest-cache
-          key: ${{ runner.os }}-jest-${{ hashFiles('jest.config.js', 'setup-jest.ts') }}-${{ hashFiles('src/**/*.spec.ts') }}
+          path: |
+            .angular/cache
+            .jest-cache
+            out-tsc
+          key: ${{ runner.os }}-build-cache-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('angular.json', 'tsconfig*.json', 'jest.config.js') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-jest-${{ hashFiles('jest.config.js', 'setup-jest.ts') }}-
-            ${{ runner.os }}-jest-
+            ${{ runner.os }}-build-cache-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('angular.json', 'tsconfig*.json', 'jest.config.js') }}-
+            ${{ runner.os }}-build-cache-${{ hashFiles('pnpm-lock.yaml') }}-
+            ${{ runner.os }}-build-cache-
 
-      # Cache Angular build
-      - name: Cache Angular build
-        uses: actions/cache@v4
-        with:
-          path: .angular/cache
-          key: ${{ runner.os }}-angular-${{ hashFiles('angular.json', 'tsconfig*.json') }}-${{ hashFiles('src/**/*.ts', 'src/**/*.html', 'src/**/*.scss') }}
-          restore-keys: |
-            ${{ runner.os }}-angular-${{ hashFiles('angular.json', 'tsconfig*.json') }}-
-            ${{ runner.os }}-angular-
-
-      # Run tests
+      # Run tests with max workers for speed
       - name: Run unit tests
-        run: pnpm test:coverage
+        run: pnpm test:coverage -- --maxWorkers=100%
 
       # Run build
       - name: Build application
@@ -133,14 +127,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-modules-
 
-      - name: Cache Jest
+      - name: Cache TypeScript build
         uses: actions/cache@v4
         with:
-          path: .jest-cache
-          key: ${{ runner.os }}-jest-integration-${{ hashFiles('jest.config.js') }}-${{ hashFiles('src/**/*.integration.spec.ts') }}
+          path: |
+            .jest-cache
+            out-tsc
+          key: ${{ runner.os }}-integration-cache-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('jest.config.js') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-jest-integration-
-            ${{ runner.os }}-jest-
+            ${{ runner.os }}-integration-cache-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('jest.config.js') }}-
+            ${{ runner.os }}-integration-cache-${{ hashFiles('pnpm-lock.yaml') }}-
+            ${{ runner.os }}-integration-cache-
 
       - name: Run integration tests
+        run: pnpm test:integration -- --maxWorkers=100%
         run: pnpm test:integration
