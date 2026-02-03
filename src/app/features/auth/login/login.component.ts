@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    // Redirect if already authenticated
+    // Redirect if already authenticated 
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['/dashboard']);
     }
