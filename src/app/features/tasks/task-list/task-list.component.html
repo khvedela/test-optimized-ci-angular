@@ -1,0 +1,123 @@
+<div class="task-list-container">
+  <div class="header">
+    <h1>Tasks</h1>
+    <button mat-raised-button color="primary" routerLink="/tasks/new">
+      <mat-icon>add</mat-icon>
+      New Task
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">Loading tasks...</div>
+  }
+
+  @if (error()) {
+    <div class="error">{{ error() }}</div>
+  }
+
+  @if (!loading() && !error()) {
+    <mat-tab-group>
+      <mat-tab label="To Do ({{ todoTasks().length }})">
+        <div class="tasks-column">
+          @for (task of todoTasks(); track task.id) {
+            <mat-card class="task-card">
+              <mat-card-header>
+                <mat-card-title>{{ task.title }}</mat-card-title>
+                <mat-chip [class]="'priority-' + task.priority">
+                  {{ task.priority | taskPriority }}
+                </mat-chip>
+              </mat-card-header>
+              <mat-card-content>
+                <p>{{ task.description }}</p>
+                @if (task.dueDate) {
+                  <div class="task-meta">
+                    <mat-icon>schedule</mat-icon>
+                    Due: {{ task.dueDate | date }}
+                  </div>
+                }
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-button [routerLink]="['/tasks', task.id]">View</button>
+                <button mat-button color="warn" (click)="onDeleteTask(task.id)">Delete</button>
+              </mat-card-actions>
+            </mat-card>
+          } @empty {
+            <div class="empty-column">No tasks</div>
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab label="In Progress ({{ inProgressTasks().length }})">
+        <div class="tasks-column">
+          @for (task of inProgressTasks(); track task.id) {
+            <mat-card class="task-card">
+              <mat-card-header>
+                <mat-card-title>{{ task.title }}</mat-card-title>
+                <mat-chip [class]="'priority-' + task.priority">
+                  {{ task.priority | taskPriority }}
+                </mat-chip>
+              </mat-card-header>
+              <mat-card-content>
+                <p>{{ task.description }}</p>
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-button [routerLink]="['/tasks', task.id]">View</button>
+                <button mat-button color="warn" (click)="onDeleteTask(task.id)">Delete</button>
+              </mat-card-actions>
+            </mat-card>
+          } @empty {
+            <div class="empty-column">No tasks</div>
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab label="In Review ({{ inReviewTasks().length }})">
+        <div class="tasks-column">
+          @for (task of inReviewTasks(); track task.id) {
+            <mat-card class="task-card">
+              <mat-card-header>
+                <mat-card-title>{{ task.title }}</mat-card-title>
+                <mat-chip [class]="'priority-' + task.priority">
+                  {{ task.priority | taskPriority }}
+                </mat-chip>
+              </mat-card-header>
+              <mat-card-content>
+                <p>{{ task.description }}</p>
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-button [routerLink]="['/tasks', task.id]">View</button>
+                <button mat-button color="warn" (click)="onDeleteTask(task.id)">Delete</button>
+              </mat-card-actions>
+            </mat-card>
+          } @empty {
+            <div class="empty-column">No tasks</div>
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Done ({{ doneTasks().length }})">
+        <div class="tasks-column">
+          @for (task of doneTasks(); track task.id) {
+            <mat-card class="task-card">
+              <mat-card-header>
+                <mat-card-title>{{ task.title }}</mat-card-title>
+                <mat-chip [class]="'priority-' + task.priority">
+                  {{ task.priority | taskPriority }}
+                </mat-chip>
+              </mat-card-header>
+              <mat-card-content>
+                <p>{{ task.description }}</p>
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-button [routerLink]="['/tasks', task.id]">View</button>
+                <button mat-button color="warn" (click)="onDeleteTask(task.id)">Delete</button>
+              </mat-card-actions>
+            </mat-card>
+          } @empty {
+            <div class="empty-column">No tasks</div>
+          }
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  }
+</div>

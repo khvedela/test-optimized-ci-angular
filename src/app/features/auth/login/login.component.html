@@ -1,0 +1,75 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Login</mat-card-title>
+      <mat-card-subtitle>Sign in to your account</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (error()) {
+        <div class="error-message">{{ error() }}</div>
+      }
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="full-width">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            placeholder="Enter your email"
+            autocomplete="email"
+          />
+          @if (loginForm.controls.email.invalid && loginForm.controls.email.touched) {
+            <mat-error>{{ getEmailErrorMessage() }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            [type]="hidePassword() ? 'password' : 'text'"
+            formControlName="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="!hidePassword()"
+          >
+            <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (loginForm.controls.password.invalid && loginForm.controls.password.touched) {
+            <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="actions">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="isLoading()"
+            class="submit-button"
+          >
+            @if (isLoading()) {
+              <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+              Login
+            }
+          </button>
+        </div>
+
+        <div class="links">
+          <a routerLink="/auth/forgot-password">Forgot password?</a>
+          <a routerLink="/auth/register">Don't have an account? Register</a>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
