@@ -141,4 +141,3 @@ jobs:
 
       - name: Run integration tests
         run: pnpm test:integration -- --maxWorkers=100%
-        run: pnpm test:integration
